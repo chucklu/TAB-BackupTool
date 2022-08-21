@@ -71,5 +71,28 @@ namespace WindowsFormsMoveFile
                 Directory.CreateDirectory(folder);
             }
         }
+
+        private void FormMain_Load(object sender, EventArgs e)
+        {
+            var sourceFolder = GetSourceFolder();
+
+            var backupRootFolder = Path.Combine(sourceFolder, "Backups");
+            if (!Directory.Exists(backupRootFolder))
+            {
+                MessageBox.Show($@"Backups folder {backupRootFolder} not exist.");
+                return;
+            }
+
+            var folders = Directory.GetDirectories(backupRootFolder);//month folder here
+            foreach (var folder in folders)
+            {
+                var node = treeViewBackups.Nodes.Add(folder);
+                var subFolders = Directory.GetDirectories(folder);
+                foreach (var subFolder in subFolders)
+                {
+                    node.Nodes.Add(subFolder);
+                }
+            }
+        }
     }
 }
