@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Configuration;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace WindowsFormsMoveFile
@@ -84,8 +77,9 @@ namespace WindowsFormsMoveFile
             }
 
             var topNode = treeViewBackups.Nodes.Add("Backups");
-
-            var folders = Directory.GetDirectories(backupRootFolder);//month folder here
+            
+            //get all month folders under backups
+            var folders = Directory.GetDirectories(backupRootFolder);
             foreach (var folder in folders)
             {
                 var folderName = Path.GetFileName(folder);
@@ -94,10 +88,39 @@ namespace WindowsFormsMoveFile
                 foreach (var subFolder in subFolders)
                 {
                     var subFolderName = Path.GetFileName(subFolder);
-                    node.Nodes.Add(subFolderName);
+                    var tempNode = node.Nodes.Add(subFolderName);
+                    tempNode.Tag = subFolder;
                 }
             }
             treeViewBackups.ExpandAll();
+        }
+
+        private void buttonRestore_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var node = treeViewBackups.SelectedNode;
+                if (node == null)
+                {
+                    MessageBox.Show(@"Please select a node to restore first");
+                    return;
+                }
+
+                var sourceFolder = GetSourceFolder();
+
+                var restoreFolder = node.Tag.ToString();
+                var files = Directory.GetFiles(restoreFolder);
+                foreach (var file in files)
+                {
+                    var fileName = Path.GetFileName(file);
+                    var targetFileName = Path.Combine(sourceFolder, fileName);
+                    File.Copy(file, targetFileName, true);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
         }
     }
 }
