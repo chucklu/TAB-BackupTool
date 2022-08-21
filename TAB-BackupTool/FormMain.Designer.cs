@@ -1,5 +1,5 @@
 ﻿
-namespace WindowsFormsMoveFile
+namespace TABBackupTool
 {
     partial class FormMain
     {
