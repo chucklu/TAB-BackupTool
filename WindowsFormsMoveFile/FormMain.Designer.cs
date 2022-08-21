@@ -44,7 +44,7 @@ namespace WindowsFormsMoveFile
             this.buttonBackup.TabIndex = 0;
             this.buttonBackup.Text = "Backup";
             this.buttonBackup.UseVisualStyleBackColor = true;
-            this.buttonBackup.Click += new System.EventHandler(this.buttonMoveFile_Click);
+            this.buttonBackup.Click += new System.EventHandler(this.buttonBackup_Click);
             // 
             // treeViewBackups
             // 

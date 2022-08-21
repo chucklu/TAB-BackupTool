@@ -7,18 +7,56 @@ namespace WindowsFormsMoveFile
 {
     public partial class FormMain : Form
     {
+        private string _sourceFolder = string.Empty;
+        private string _sourceFolderKey = "SourceFolder";
+
         public FormMain()
         {
             InitializeComponent();
         }
 
-        private void buttonMoveFile_Click(object sender, EventArgs e)
+        private void SaveSourceFolder()
+        {
+            var inputFolder = textBoxSourceFolder.Text;
+            if (inputFolder.Equals(_sourceFolder))
+            {
+                return;
+            }
+
+            if (!Directory.Exists(inputFolder))
+            {
+                throw new Exception($"Folder {inputFolder} not exist.");
+            }
+
+            AddOrUpdateAppSettings(_sourceFolderKey, inputFolder);
+            _sourceFolder = inputFolder;
+        }
+
+        //https://stackoverflow.com/a/26778377
+        public static void AddOrUpdateAppSettings(string key, string value)
+        {
+            var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var settings = configFile.AppSettings.Settings;
+            if (settings[key] == null)
+            {
+                settings.Add(key, value);
+            }
+            else
+            {
+                settings[key].Value = value;
+            }
+
+            configFile.Save(ConfigurationSaveMode.Modified);
+            ConfigurationManager.RefreshSection(configFile.AppSettings.SectionInformation.Name);
+        }
+
+        private void buttonBackup_Click(object sender, EventArgs e)
         {
             try
             {
-                var sourceFolder = GetSourceFolder();
+                SaveSourceFolder();
 
-                var backupRootFolder = Path.Combine(sourceFolder, "Backups");
+                var backupRootFolder = Path.Combine(_sourceFolder, "Backups");
                 CreateFolder(backupRootFolder);
 
                 var monthFolder = Path.Combine(backupRootFolder, DateTime.Now.ToString("yyyyMM"));
@@ -27,7 +65,7 @@ namespace WindowsFormsMoveFile
                 var backupFolder = Path.Combine(monthFolder, DateTime.Now.ToString("yyyy-MM-dd HHmmss"));
                 CreateFolder(backupFolder);
 
-                var files = Directory.GetFiles(sourceFolder);
+                var files = Directory.GetFiles(_sourceFolder);
                 foreach (var file in files)
                 {
                     var fileName = Path.GetFileName(file);
@@ -43,7 +81,7 @@ namespace WindowsFormsMoveFile
 
         private string GetSourceFolder()
         {
-            var sourceFolder = ConfigurationManager.AppSettings["SourceFolder"];
+            var sourceFolder = ConfigurationManager.AppSettings[_sourceFolderKey];
             if (string.IsNullOrWhiteSpace(sourceFolder))
             {
                 throw new Exception("Can not find source folder in app setting.");
@@ -51,7 +89,7 @@ namespace WindowsFormsMoveFile
 
             if (!Directory.Exists(sourceFolder))
             {
-                throw new Exception("Source folder not exist");
+                throw new Exception("Source folder not exist.");
             }
 
             return sourceFolder;
@@ -67,10 +105,10 @@ namespace WindowsFormsMoveFile
 
         private void FormMain_Load(object sender, EventArgs e)
         {
-            var sourceFolder = GetSourceFolder();
-            textBoxSourceFolder.Text = sourceFolder;
+            _sourceFolder = GetSourceFolder();
+            textBoxSourceFolder.Text = _sourceFolder;
 
-            var backupRootFolder = Path.Combine(sourceFolder, "Backups");
+            var backupRootFolder = Path.Combine(_sourceFolder, "Backups");
             if (!Directory.Exists(backupRootFolder))
             {
                 MessageBox.Show($@"Backups folder {backupRootFolder} not exist.");
@@ -103,18 +141,22 @@ namespace WindowsFormsMoveFile
                 var node = treeViewBackups.SelectedNode;
                 if (node == null)
                 {
-                    MessageBox.Show(@"Please select a node to restore first");
+                    MessageBox.Show(@"Please select a node to restore first.");
                     return;
                 }
 
-                var sourceFolder = GetSourceFolder();
+                if (node.Tag == null)
+                {
+                    MessageBox.Show(@"Please select correct node.");
+                    return;
+                }
 
                 var restoreFolder = node.Tag.ToString();
                 var files = Directory.GetFiles(restoreFolder);
                 foreach (var file in files)
                 {
                     var fileName = Path.GetFileName(file);
-                    var targetFileName = Path.Combine(sourceFolder, fileName);
+                    var targetFileName = Path.Combine(_sourceFolder, fileName);
                     File.Copy(file, targetFileName, true);
                 }
             }
