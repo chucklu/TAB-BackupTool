@@ -83,16 +83,21 @@ namespace WindowsFormsMoveFile
                 return;
             }
 
+            var topNode = treeViewBackups.Nodes.Add("Backups");
+
             var folders = Directory.GetDirectories(backupRootFolder);//month folder here
             foreach (var folder in folders)
             {
-                var node = treeViewBackups.Nodes.Add(folder);
+                var folderName = Path.GetFileName(folder);
+                var node = topNode.Nodes.Add(folderName);
                 var subFolders = Directory.GetDirectories(folder);
                 foreach (var subFolder in subFolders)
                 {
-                    node.Nodes.Add(subFolder);
+                    var subFolderName = Path.GetFileName(subFolder);
+                    node.Nodes.Add(subFolderName);
                 }
             }
+            treeViewBackups.ExpandAll();
         }
     }
 }
