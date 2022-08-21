@@ -32,6 +32,7 @@ namespace WindowsFormsMoveFile
             this.buttonBackup = new System.Windows.Forms.Button();
             this.treeViewBackups = new System.Windows.Forms.TreeView();
             this.buttonRestore = new System.Windows.Forms.Button();
+            this.textBoxSourceFolder = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // buttonBackup
@@ -62,19 +63,28 @@ namespace WindowsFormsMoveFile
             this.buttonRestore.UseVisualStyleBackColor = true;
             this.buttonRestore.Click += new System.EventHandler(this.buttonRestore_Click);
             // 
+            // textBoxSourceFolder
+            // 
+            this.textBoxSourceFolder.Location = new System.Drawing.Point(12, 23);
+            this.textBoxSourceFolder.Name = "textBoxSourceFolder";
+            this.textBoxSourceFolder.Size = new System.Drawing.Size(332, 20);
+            this.textBoxSourceFolder.TabIndex = 3;
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(600, 366);
+            this.Controls.Add(this.textBoxSourceFolder);
             this.Controls.Add(this.buttonRestore);
             this.Controls.Add(this.treeViewBackups);
             this.Controls.Add(this.buttonBackup);
             this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "FormMain";
-            this.Text = "Form1";
+            this.Text = "Backup tool for 《They Are Billions》（亿万僵尸）";
             this.Load += new System.EventHandler(this.FormMain_Load);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -83,6 +93,7 @@ namespace WindowsFormsMoveFile
         private System.Windows.Forms.Button buttonBackup;
         private System.Windows.Forms.TreeView treeViewBackups;
         private System.Windows.Forms.Button buttonRestore;
+        private System.Windows.Forms.TextBox textBoxSourceFolder;
     }
 }
 

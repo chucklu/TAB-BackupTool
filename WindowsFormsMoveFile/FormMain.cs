@@ -68,6 +68,7 @@ namespace WindowsFormsMoveFile
         private void FormMain_Load(object sender, EventArgs e)
         {
             var sourceFolder = GetSourceFolder();
+            textBoxSourceFolder.Text = sourceFolder;
 
             var backupRootFolder = Path.Combine(sourceFolder, "Backups");
             if (!Directory.Exists(backupRootFolder))
