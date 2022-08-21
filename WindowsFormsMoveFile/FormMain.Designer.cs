@@ -38,7 +38,7 @@ namespace WindowsFormsMoveFile
             // buttonBackup
             // 
             this.buttonBackup.Location = new System.Drawing.Point(356, 11);
-            this.buttonBackup.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonBackup.Margin = new System.Windows.Forms.Padding(2);
             this.buttonBackup.Name = "buttonBackup";
             this.buttonBackup.Size = new System.Drawing.Size(83, 43);
             this.buttonBackup.TabIndex = 0;
@@ -67,6 +67,7 @@ namespace WindowsFormsMoveFile
             // 
             this.textBoxSourceFolder.Location = new System.Drawing.Point(12, 23);
             this.textBoxSourceFolder.Name = "textBoxSourceFolder";
+            this.textBoxSourceFolder.ReadOnly = true;
             this.textBoxSourceFolder.Size = new System.Drawing.Size(332, 20);
             this.textBoxSourceFolder.TabIndex = 3;
             // 
@@ -79,7 +80,7 @@ namespace WindowsFormsMoveFile
             this.Controls.Add(this.buttonRestore);
             this.Controls.Add(this.treeViewBackups);
             this.Controls.Add(this.buttonBackup);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "FormMain";
             this.Text = "Backup tool for 《They Are Billions》（亿万僵尸）";
             this.Load += new System.EventHandler(this.FormMain_Load);

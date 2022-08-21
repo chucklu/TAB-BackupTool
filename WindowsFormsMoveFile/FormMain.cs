@@ -54,7 +54,7 @@ namespace WindowsFormsMoveFile
         {
             try
             {
-                SaveSourceFolder();
+                //SaveSourceFolder();
 
                 var backupRootFolder = Path.Combine(_sourceFolder, "Backups");
                 CreateFolder(backupRootFolder);
@@ -110,32 +110,37 @@ namespace WindowsFormsMoveFile
                 _sourceFolder = GetSourceFolder();
                 textBoxSourceFolder.Text = _sourceFolder;
 
-                var backupRootFolder = Path.Combine(_sourceFolder, "Backups");
-                CreateFolder(backupRootFolder);
-
-                var topNode = treeViewBackups.Nodes.Add("Backups");
-
-                //get all month folders under backups
-                var folders = Directory.GetDirectories(backupRootFolder);
-                foreach (var folder in folders)
-                {
-                    var folderName = Path.GetFileName(folder);
-                    var node = topNode.Nodes.Add(folderName);
-                    var subFolders = Directory.GetDirectories(folder);
-                    foreach (var subFolder in subFolders)
-                    {
-                        var subFolderName = Path.GetFileName(subFolder);
-                        var tempNode = node.Nodes.Add(subFolderName);
-                        tempNode.Tag = subFolder;
-                    }
-                }
-
-                treeViewBackups.ExpandAll();
+                LoadBackups();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
             }
+        }
+
+        private void LoadBackups()
+        {
+            var backupRootFolder = Path.Combine(_sourceFolder, "Backups");
+            CreateFolder(backupRootFolder);
+
+            var topNode = treeViewBackups.Nodes.Add("Backups");
+
+            //get all month folders under backups
+            var folders = Directory.GetDirectories(backupRootFolder);
+            foreach (var folder in folders)
+            {
+                var folderName = Path.GetFileName(folder);
+                var node = topNode.Nodes.Add(folderName);
+                var subFolders = Directory.GetDirectories(folder);
+                foreach (var subFolder in subFolders)
+                {
+                    var subFolderName = Path.GetFileName(subFolder);
+                    var tempNode = node.Nodes.Add(subFolderName);
+                    tempNode.Tag = subFolder;
+                }
+            }
+
+            treeViewBackups.ExpandAll();
         }
 
         private void buttonRestore_Click(object sender, EventArgs e)
