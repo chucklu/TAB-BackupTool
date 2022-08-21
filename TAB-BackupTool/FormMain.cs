@@ -72,6 +72,7 @@ namespace TABBackupTool
                     var targetFileName = Path.Combine(backupFolder, fileName);
                     File.Copy(file, targetFileName);
                 }
+                ReloadLoadBackups();
             }
             catch (Exception ex)
             {
@@ -116,6 +117,12 @@ namespace TABBackupTool
             {
                 MessageBox.Show(ex.ToString());
             }
+        }
+
+        private void ReloadLoadBackups()
+        {
+            treeViewBackups.Nodes.Clear();
+            LoadBackups();
         }
 
         private void LoadBackups()
